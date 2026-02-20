@@ -2,7 +2,7 @@
 name = "skill-browser"
 version = "0.1.0"
 description = "Skill浏览器桌面应用"
-authors = [""]
+authors = ["skill-browser"]
 edition = "2021"
 
 [lib]
