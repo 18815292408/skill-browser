@@ -61,3 +61,30 @@ fn read_skill_description(path: &PathBuf) -> String {
 
     String::new()
 }
+
+#[tauri::command]
+pub fn load_cache(file_name: String) -> Result<String, String> {
+    let cache_dir = dirs::data_local_dir()
+        .ok_or("无法获取数据目录")?
+        .join("skill-browser");
+
+    let cache_file = cache_dir.join(&file_name);
+
+    if !cache_file.exists() {
+        return Ok("{}".to_string());
+    }
+
+    fs::read_to_string(&cache_file).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn save_cache(file_name: String, content: String) -> Result<(), String> {
+    let cache_dir = dirs::data_local_dir()
+        .ok_or("无法获取数据目录")?
+        .join("skill-browser");
+
+    fs::create_dir_all(&cache_dir).map_err(|e| e.to_string())?;
+
+    let cache_file = cache_dir.join(&file_name);
+    fs::write(&cache_file, content).map_err(|e| e.to_string())
+}
