@@ -68,7 +68,7 @@ export async function translateAndCache(
     const translation = data.choices?.[0]?.message?.content || '';
 
     // 解析翻译结果（简单处理）
-    const lines = translation.split('\n').filter(l => l.trim());
+    const lines = translation.split('\n').filter((l: string) => l.trim());
     const nameZh = lines[0]?.replace(/^名称[:：]\s*/, '') || skill.name;
     const descriptionZh = lines.slice(1).join('\n').replace(/^描述[:：]\s*/, '') || skill.description;
 

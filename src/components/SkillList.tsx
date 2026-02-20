@@ -1,6 +1,5 @@
 import { useSkillStore } from '../store/skillStore';
 import { SkillItem } from './SkillItem';
-import { invoke } from '@tauri-apps/api/core';
 
 export function SkillList() {
   const { filteredSkills, loading } = useSkillStore();

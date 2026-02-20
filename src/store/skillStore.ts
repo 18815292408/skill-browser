@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export interface Skill {
   id: string;
   name: string;
+  nameZh?: string;
   description: string;
   descriptionZh?: string;
   path: string;
