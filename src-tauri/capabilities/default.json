@@ -6,10 +6,16 @@
   "permissions": [
     "core:default",
     "shell:allow-open",
-    "clipboard-manager:allow-read",
-    "clipboard-manager:allow-write",
-    "fs:allow-read",
-    "fs:allow-write",
+    "clipboard-manager:allow-read-text",
+    "clipboard-manager:allow-write-text",
+    {
+      "identifier": "fs:allow-read",
+      "allow": [{ "path": "$HOME/**" }, { "path": "$APPDATA/**" }, { "path": "$LOCALAPPDATA/**" }]
+    },
+    {
+      "identifier": "fs:allow-write",
+      "allow": [{ "path": "$APPDATA/**" }, { "path": "$LOCALAPPDATA/**" }]
+    },
     "fs:allow-exists",
     "fs:allow-mkdir",
     "fs:allow-remove",
