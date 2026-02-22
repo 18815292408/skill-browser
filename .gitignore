@@ -38,3 +38,7 @@ src-tauri/target/
 
 # OS
 Thumbs.db
+
+# Generated icon files
+src-tauri/icons/design-philosophy.md
+src-tauri/icons/generate_icon.py
