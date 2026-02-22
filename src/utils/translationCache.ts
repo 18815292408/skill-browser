@@ -44,12 +44,14 @@ export async function translateAndCache(
   cache: CacheData,
   apiKey: string
 ): Promise<Skill> {
-  if (cache[skill.id]) {
-    return { ...skill, ...cache[skill.id] };
+  // 检查缓存是否有有效的翻译内容
+  const cached = cache[skill.id];
+  if (cached && (cached.nameZh?.trim() || cached.descriptionZh?.trim())) {
+    return { ...skill, ...cached };
   }
 
   if (!apiKey) {
-    return skill;
+    throw new Error('请先在设置中配置 API Key');
   }
 
   try {

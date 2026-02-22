@@ -12,8 +12,8 @@ interface Props {
 }
 
 export function SkillItem({ skill, onCopy, selectMode, selected, isTranslated, onToggleSelect, onToggleFavorite, onTogglePinned }: Props) {
-  const displayName = skill.nameZh || skill.name;
-  const displayDesc = skill.descriptionZh || skill.description;
+  const displayName = (skill.nameZh && skill.nameZh.trim()) || skill.name;
+  const displayDesc = (skill.descriptionZh && skill.descriptionZh.trim()) || skill.description;
   const isFavorite = skill.isFavorite || false;
   const isPinned = skill.isPinned || false;
 

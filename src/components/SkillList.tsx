@@ -29,7 +29,7 @@ export function SkillList({ selectMode, selectedIds, onToggleSelect, onCopy }: P
           onCopy={onCopy || (() => {})}
           selectMode={selectMode}
           selected={selectedIds?.has(skill.id)}
-          isTranslated={!!cache[skill.id]}
+          isTranslated={!!(cache[skill.id]?.nameZh || cache[skill.id]?.descriptionZh)}
           onToggleSelect={onToggleSelect}
           onToggleFavorite={toggleFavorite}
           onTogglePinned={togglePinned}

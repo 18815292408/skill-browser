@@ -92,32 +92,55 @@ function App() {
     }
 
     const { skills } = useSkillStore.getState();
-    const skillsToTranslate = skills.filter(s => selectedIds.has(s.id) && !cache[s.id]);
+    // 检查缓存是否有有效的翻译内容
+    const hasValidTranslation = (id: string) => {
+      const item = cache[id];
+      return item && (item.nameZh?.trim() || item.descriptionZh?.trim());
+    };
+    // 如果在选择模式下，只翻译选中的技能；否则翻译所有未翻译的技能
+    const skillsToTranslate = selectMode
+      ? skills.filter(s => selectedIds.has(s.id) && !hasValidTranslation(s.id))
+      : skills.filter(s => !hasValidTranslation(s.id));
 
     if (skillsToTranslate.length === 0) {
-      alert('没有需要翻译的 Skill');
+      setToast({ visible: true, message: '没有需要翻译的 Skill' });
       return;
     }
 
     setTranslating(true);
     const currentCache = { ...cache };
+    let translatedCount = 0;
+    let errorMessage = '';
 
     for (const skill of skillsToTranslate) {
-      const translated = await translateAndCache(skill, currentCache, apiKey);
-      const { isFavorite, isPinned } = currentCache[translated.id] || {};
-      currentCache[translated.id] = {
-        nameZh: translated.nameZh,
-        descriptionZh: translated.descriptionZh,
-        lastUpdated: new Date().toISOString(),
-        isFavorite: isFavorite || false,
-        isPinned: isPinned || false
-      };
-      setCache({ ...currentCache });
+      try {
+        const translated = await translateAndCache(skill, currentCache, apiKey);
+        const { isFavorite, isPinned } = currentCache[translated.id] || {};
+        currentCache[translated.id] = {
+          nameZh: translated.nameZh,
+          descriptionZh: translated.descriptionZh,
+          lastUpdated: new Date().toISOString(),
+          isFavorite: isFavorite || false,
+          isPinned: isPinned || false
+        };
+        setCache({ ...currentCache });
+        translatedCount++;
+      } catch (e) {
+        errorMessage = String(e);
+        console.error('翻译失败:', e);
+        break;
+      }
     }
 
     setSelectedIds(new Set());
     setSelectMode(false);
     setTranslating(false);
+
+    if (errorMessage) {
+      setToast({ visible: true, message: '翻译失败: ' + errorMessage });
+    } else if (translatedCount > 0) {
+      setToast({ visible: true, message: `翻译完成 ${translatedCount} 个` });
+    }
   };
 
   // 切换选择模式 (在翻译和清除翻译之间切换)
