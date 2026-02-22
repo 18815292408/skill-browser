@@ -17,7 +17,7 @@ export function Settings({ isOpen, onClose, apiKey, onSave }: Props) {
       <div className="bg-gray-800 rounded-lg p-4 w-80">
         <h2 className="text-lg font-bold mb-4">设置</h2>
         <div className="mb-4">
-          <label className="block text-sm text-gray-400 mb-1">AI API Key</label>
+          <label className="block text-sm text-gray-400 mb-1">DeepSeek API Key</label>
           <input
             type="password"
             value={key}
@@ -25,6 +25,7 @@ export function Settings({ isOpen, onClose, apiKey, onSave }: Props) {
             className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-sm"
             placeholder="sk-..."
           />
+          <p className="text-xs text-gray-500 mt-1">请输入 DeepSeek API Key</p>
         </div>
         <div className="flex gap-2">
           <button

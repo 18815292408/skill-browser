@@ -1,18 +1,15 @@
 import { useSkillStore } from '../store/skillStore';
 import { SkillItem } from './SkillItem';
 
-export function SkillList() {
-  const { filteredSkills, loading } = useSkillStore();
+interface Props {
+  selectMode?: boolean;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (id: string) => void;
+  onCopy?: (cmd: string) => void;
+}
 
-  const handleCopy = async (cmd: string) => {
-    try {
-      await navigator.clipboard.writeText(cmd);
-      alert(`已复制: ${cmd}`);
-    } catch {
-      alert('复制失败');
-    }
-  };
-
+export function SkillList({ selectMode, selectedIds, onToggleSelect, onCopy }: Props) {
+  const { filteredSkills, loading, cache, toggleFavorite, togglePinned } = useSkillStore();
   const skills = filteredSkills();
 
   if (loading) {
@@ -26,7 +23,17 @@ export function SkillList() {
   return (
     <div className="space-y-2">
       {skills.map(skill => (
-        <SkillItem key={skill.id} skill={skill} onCopy={handleCopy} />
+        <SkillItem
+          key={skill.id}
+          skill={skill}
+          onCopy={onCopy || (() => {})}
+          selectMode={selectMode}
+          selected={selectedIds?.has(skill.id)}
+          isTranslated={!!cache[skill.id]}
+          onToggleSelect={onToggleSelect}
+          onToggleFavorite={toggleFavorite}
+          onTogglePinned={togglePinned}
+        />
       ))}
     </div>
   );
